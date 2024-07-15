@@ -7,3 +7,4 @@ db = SqliteDatabase(Config.DATABASE["name"])
 class BaseModel(Model):
     class Meta:
         database = db
+db.connect()
