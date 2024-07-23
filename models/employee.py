@@ -30,7 +30,7 @@ class Employee(BaseModel):
         table_name = "employee"
 
     def __str__(self):
-        return f"{self.full_name}"
+        return self.full_name
 
     def to_dict(self):
         return {
@@ -69,18 +69,6 @@ class Employee(BaseModel):
             algorithm=str(os.getenv("JWT_ALGORITHM")),
         )
         return token
-
-    @classmethod
-    def get_all_employee(cls):
-        return [employee for employee in cls.select()]
-
-    @classmethod
-    def get_employee_by_id(cls, id):
-        return cls.get_by_id(pk=id)
-
-    @classmethod
-    def delete_employee_by_id(cls, id):
-        cls.delete_by_id(pk=id)
 
     @staticmethod
     def decode_jwt(token):

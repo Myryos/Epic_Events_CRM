@@ -32,7 +32,7 @@ class EmployeeController:
     @classmethod
     def modify_employee(cls):
         employee_to_modify = EmployeeView.choose_employee_to_modify(
-            all_employee=Employee.get_all_employee()
+            all_employee=list(Employee.select())
         )
         employee_field = EmployeeView.ask_employeefield_modfied()
 
@@ -50,8 +50,6 @@ class EmployeeController:
             employee_to_modify.role = new_role
         if employee_field == "None":
             return None
-
-        employee_to_modify.update_time = datetime.now()
         employee_to_modify.save()
 
         # Ajout d'un message de fin
@@ -77,6 +75,10 @@ class EmployeeController:
         )
 
         EmployeeView.show_one_employee(employee=employee)
+
+    @classmethod
+    def get_all_employee(cls):
+        return Employee.get_all_employee()
 
     @staticmethod
     def check_token():

@@ -2,6 +2,8 @@ from peewee import CharField, IntegerField, TimestampField, ForeignKeyField
 from .base import BaseModel
 from .employee import Employee
 
+from datetime import datetime
+
 
 class Client(BaseModel):
     id = IntegerField(primary_key=True)
@@ -15,3 +17,10 @@ class Client(BaseModel):
 
     class Meta:
         table_name = "client"
+
+    def __str__(self):
+        return self.full_name
+
+    def save(self, *args, **kwargs):
+        self.update_time = datetime.now()
+        super().save(*args, **kwargs)

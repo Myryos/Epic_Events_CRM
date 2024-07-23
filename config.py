@@ -1,21 +1,26 @@
 import os
 import sentry_sdk
-
+from sentry_sdk.integrations.logging import LoggingIntegration
+import logging
 from dotenv import load_dotenv
 
 load_dotenv()
-
+sentry_logging = LoggingIntegration(
+    level=logging.INFO,  # Capture info and above as breadcrumbs
+    event_level=logging.ERROR,  # Send errors as events
+)
 sentry_sdk.init(
     dsn=os.getenv("DSN_SENTRY"),
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for performance monitoring.
     traces_sample_rate=0.1,
-    # Set profiles_sample_rate to 1.0 to profile 100%
-    # of sampled transactions.
-    # We recommend adjusting this value in production.
     profiles_sample_rate=0.1,
+    integrations=[sentry_logging],
 )
-
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+handler = logging.StreamHandler()
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 class Config:
     DATABASE = {
