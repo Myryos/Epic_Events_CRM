@@ -1,6 +1,7 @@
 from models.employee import Employee
 from views.employee_view import EmployeeView
 from datetime import datetime
+from peewee import DoesNotExist
 import jwt
 
 class EmployeeController:
@@ -54,15 +55,12 @@ class EmployeeController:
 
     @classmethod
     def login_employee(cls):
-        answer = EmployeeView.ask_employee_credentials()
-        employee = Employee.get(Employee.email == answer["email"])
-        if employee.check_password(answer["password"]):
-            token = employee.generate_jwt()
-            Employee.set_token(token)
-            cls._display_success_message("login")
-            return token
-        else:
-            cls._display_success_message("login_failure")
+        credentials = EmployeeView.ask_employee_credentials()
+        try:
+            employee = Employee.get(Employee.email == credentials["email"])
+            if employee.check_password(credentials["password"]):
+                return employee.generate_jwt()
+        except DoesNotExist:
             return None
 
     @classmethod

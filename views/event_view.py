@@ -32,12 +32,11 @@ class EventView:
 
     @classmethod
     def choose_event_modify(cls, events):
-        event_choices = [(event.id, str(event)) for event in events]
         event_to_modify = [
             inquirer.List(
                 name="event",
                 message="Which event do you want to modify?",
-                choices=event_choices,
+                choices=events,
             )
         ]
 
@@ -46,12 +45,11 @@ class EventView:
 
     @classmethod
     def choose_event_delete(cls, events):
-        event_choices = [(event.id, str(event)) for event in events]
         event_to_delete = [
             inquirer.List(
                 name="event",
                 message="Which event do you want to delete?",
-                choices=event_choices,
+                choices=events,
             )
         ]
 
@@ -60,12 +58,11 @@ class EventView:
 
     @classmethod
     def choose_event(cls, events):
-        event_choices = [(event.id, str(event)) for event in events]
         event_to_show = [
             inquirer.List(
                 name="event",
                 message="Which event do you want to display?",
-                choices=event_choices,
+                choices=events,
             )
         ]
 
