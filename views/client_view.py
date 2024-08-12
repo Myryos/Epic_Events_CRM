@@ -152,16 +152,20 @@ class ClientView:
         return new_enterprise_answer["enterprise"]
 
     @classmethod
-    def display_all_client(cls, clients):
+    def display_clients(cls, clients):
         for client in clients:
             print(f"Full Name: {client}")
 
     @classmethod
-    def display_one_client(cls, client):
+    def display_client(cls, client):
         print(
-            f"Full Name: {client.full_name}, Email: {client.email}, Role: {client.role}, "
+            f"Full Name: {client.full_name}, Email: {client.email},"
             f"Creation Time: {client.creation_time}, Update Time: {client.update_time}"
         )
+
+    @classmethod
+    def display_message(cls, message):
+        print(f"\n{message}\n")
 
     @staticmethod
     def validate_email(email: str):

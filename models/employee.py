@@ -14,8 +14,9 @@ load_dotenv()
 class Employee(BaseModel):
     MANAGER = 1
     SALESMAN = 2
+    SUPPORT = 3
 
-    ROLE_CHOICES = ((MANAGER, "Manager"), (SALESMAN, "Salesman"))
+    ROLE_CHOICES = ((MANAGER, "Manager"), (SALESMAN, "Salesman"), (SUPPORT, "Support"))
 
     id = IntegerField(primary_key=True)
     full_name = CharField(max_length=64)
@@ -65,8 +66,8 @@ class Employee(BaseModel):
 
         token = jwt.encode(
             payload,
-            str(os.getenv("SECRET_KEY")),
-            algorithm=str(os.getenv("JWT_ALGORITHM")),
+            os.getenv("JWT_SECRET_KEY"),
+            algorithm=os.getenv("JWT_ALGORITHM"),
         )
         return token
 
@@ -74,9 +75,11 @@ class Employee(BaseModel):
     def decode_jwt(token):
         try:
             payload = jwt.decode(
-                token, os.getenv("SECRET_KEY"), algorithm=[os.getenv("JWT_ALGORITHM")]
+                jwt=token,
+                key=os.getenv("JWT_SECRET_KEY"),
+                algorithms=[os.getenv("JWT_ALGORITHM")],
             )
-            return payload["employee_id"]
+            return payload.get("employee_id")
         except jwt.ExpiredSignatureError:
             print("Token has expired.")
             return None

@@ -24,3 +24,6 @@ class Client(BaseModel):
     def save(self, *args, **kwargs):
         self.update_time = datetime.now()
         super().save(*args, **kwargs)
+
+    def is_contact(self, employee):
+        return self.contact == employee

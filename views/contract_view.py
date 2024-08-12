@@ -136,14 +136,14 @@ class ContractView:
         return new_sales_person_answer["sales_person"]
 
     @classmethod
-    def display_all_contracts(cls, contracts):
+    def display_contracts(cls, contracts):
         for contract in contracts:
             print(
                 f"Client: {contract.client.full_name}, Total Amount: {contract.total_amount}, Remaining Amount: {contract.remaining_amount}, Date: {contract.date}, Status: {contract.status}"
             )
 
     @classmethod
-    def display_one_contract(cls, contract):
+    def display_contract(cls, contract):
         print(
             f"Client: {contract.client.full_name}, Total Amount: {contract.total_amount}, Remaining Amount: {contract.remaining_amount}, Date: {contract.date}, Status: {contract.status}"
         )

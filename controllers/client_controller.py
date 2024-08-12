@@ -1,6 +1,8 @@
 from models.client import Client
-from controllers.employee_controller import EmployeeController
+from models.employee import Employee
 from views.client_view import ClientView
+
+from permissions import has_permission
 
 import datetime
 
@@ -24,52 +26,62 @@ class ClientController:
         # Ajouter un message de fin dans la view
 
     @classmethod
-    def modify_client(cls):
-        clients = list(Client.select())
+    def _get_clients(cls):
+        return list(Client.select())
 
-        client = ClientView.choose_a_client_modify(clients=clients)
+    @classmethod
+    def _choose_client(cls, prompt_func):
+        clients = cls._get_clients()
+        return prompt_func(clients=clients)
+
+    @classmethod
+    def _check_permission(cls, employee, client):
+        if not has_permission(employee=employee, client=client):
+            raise PermissionError("You do not have permission to perform this action.")
+
+    @classmethod
+    def _display_end_message(cls, message):
+        ClientView.display_message(message)
+
+    @classmethod
+    def modify_client(cls, employee):
+        client = cls._choose_client(ClientView.choose_a_client_modify)
+        cls._check_permission(employee, client)
 
         client_field = ClientView.client_field_to_modify()
 
         if client_field == "Full Name":
-            new_name = ClientView.ask_new_full_name()
-            client.full_name = new_name
+            client.full_name = ClientView.ask_new_full_name()
         elif client_field == "Email":
-            new_mail = ClientView.ask_new_email()
-            client.email = new_mail
+            client.email = ClientView.ask_new_email()
         elif client_field == "Phone":
-            new_phonenumber = ClientView.ask_new_phonenumber()
-            client.phone = new_phonenumber
+            client.phone = ClientView.ask_new_phonenumber()
         elif client_field == "Contact":
-            contacts = EmployeeController.get_all_employee()
+            contacts = list(Employee.select())
             new_contact = ClientView.ask_new_contact(contacts=contacts)
             client.contact = new_contact.id
         elif client_field == "Enterprise":
-            new_enterprise = ClientView.ask_new_enterprise()
-            client.enterprise = new_enterprise
+            client.enterprise = ClientView.ask_new_enterprise()
         elif client_field == "None":
             return None
 
         client.save()
-
-        # Ajouter un message de fin dans la view
+        cls._display_end_message("Client modified successfully.")
 
     @classmethod
-    def delete_client(cls):
-        clients = list(Client.select())
-        client = ClientView.choose_client_delete(clients=clients)
+    def delete_client(cls, employee):
+        client = cls._choose_client(ClientView.choose_client_delete)
+        cls._check_permission(employee, client)
 
         Client.delete_by_id(client.id)
-        # Ajouter un message de fin dans la view
+        cls._display_end_message("Client deleted successfully.")
 
     @classmethod
-    def show_all_clients(cls):
-        clients = list(Client.select())
-        ClientView.display_all_client(clients=clients)
+    def display_clients(cls):
+        clients = cls._get_clients()
+        ClientView.display_clients(clients=clients)
 
     @classmethod
-    def show_one_client(cls):
-        clients = list(Client.select())
-        client = ClientView.choose_client(clients=clients)
-
-        ClientView.display_one_client(client=client)
+    def display_client(cls):
+        client = cls._choose_client(ClientView.choose_client)
+        ClientView.display_client(client=client)

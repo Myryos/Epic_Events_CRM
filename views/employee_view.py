@@ -1,12 +1,14 @@
 import inquirer
 import re
 
+from models import Employee
+
 
 class EmployeeView:
 
     @classmethod
     def ask_employee_details(cls):
-        roles = ["Manager", "Salesman"]
+        roles = ["Manager", "Salesman", "Support"]
 
         new_employee_questions = [
             inquirer.Text(name="full_name", message="What is your full name ?"),
@@ -48,45 +50,16 @@ class EmployeeView:
         return employee_cred_answers
 
     @classmethod
-    def choose_employee_to_modify(cls, all_employee):
-        employee_to_modify = [
-            inquirer.List(
-                "employee_to_modify",
-                message="Which Employee do you want to modify ?",
-                choices=all_employee,
-            )
-        ]
-
-        answer = inquirer.prompt(employee_to_modify)
-
-        return answer["employee_to_modify"]
-
-    @classmethod
-    def choose_employee_to_delete(cls, all_employee):
-        employe_to_delete = [
-            inquirer.List(
-                name="employee_to_del",
-                message="Which Employee do you want to delete ?",
-                choices=all_employee,
-            )
-        ]
-
-        answer = inquirer.prompt(employe_to_delete)
-
-        return answer["employee_to_del"]
-
-    @classmethod
-    def choose_employee(cls, all_employee):
-        employee_to_show = [
+    def choose_employee(cls, all_employee, message):
+        employee_choice = [
             inquirer.List(
                 name="employee",
-                message="Which Employe do you want to display ?",
+                message=message,
                 choices=all_employee,
             )
         ]
 
-        answer = inquirer.prompt(employee_to_show)
-
+        answer = inquirer.prompt(employee_choice)
         return answer["employee"]
 
     @classmethod
@@ -148,7 +121,7 @@ class EmployeeView:
 
     @classmethod
     def ask_new_role(cls):
-        roles = ["Manager", "Salesman"]
+        roles = ["Manager", "Salesman", "Support"]
 
         new_role_question = [
             inquirer.List(
@@ -167,12 +140,12 @@ class EmployeeView:
         print(message)
 
     @classmethod
-    def show_all_employee(cls, all_employee):
+    def display_employees(cls, all_employee):
         for employee in all_employee:
             print(f"Full Name: {employee}")
 
     @classmethod
-    def show_one_employee(cls, employee):
+    def display_employee(cls, employee):
         print(
             f"Full Name: {employee.full_name}, Email: {employee.email}, Role: {employee.role}, "
             f"Creation Time: {employee.creation_time}, Update Time: {employee.update_time}"

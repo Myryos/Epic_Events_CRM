@@ -33,3 +33,6 @@ class Contract(BaseModel):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+
+    def is_sales_person(self, employee):
+        return self.sales_person == employee
