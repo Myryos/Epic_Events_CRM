@@ -59,8 +59,10 @@ class EmployeeController:
         try:
             employee = Employee.get(Employee.email == credentials["email"])
             if employee.check_password(credentials["password"]):
-                return employee.generate_jwt()
+                token = employee.generate_jwt()
+                return employee.set_token(token)
         except DoesNotExist:
+            print("Employee does not exist")
             return None
 
     @classmethod

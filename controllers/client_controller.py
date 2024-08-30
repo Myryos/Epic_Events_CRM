@@ -4,8 +4,6 @@ from views.client_view import ClientView
 
 from permissions import has_permission
 
-import datetime
-
 
 class ClientController:
 
