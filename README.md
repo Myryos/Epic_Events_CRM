@@ -23,9 +23,9 @@ This project utilizes the following technologies:
 
 1. **Clone the repository** and navigate into the project directory.
 
-    ``` git clone https://github.com/Myryos/p12_0624.git```
+    ``` git clone https://github.com/Myryos/Epic_Events_CRM.git```
     and
-    ``` cd p12_0624 ```
+    ``` cd Epic_Events_CRM ```
 
 2. **Set up a virtual environment**:
     ```poetry env use python3.10```
